@@ -1,7 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { getUser } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
-import { ManageContent } from './manage-content'
+import { ManageContent } from '@/app/(dashboard)/manage/manage-content'
 
 export default async function ManagePage() {
   const supabase = await createClient()
