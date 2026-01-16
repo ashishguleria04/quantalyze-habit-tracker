@@ -20,6 +20,24 @@ export async function parseSpreadsheet(file: File): Promise<ParsedSpreadsheetDat
 }
 
 /**
+ * Detect which column contains dates based on header names
+ */
+export function detectDateColumn(headers: string[]): number {
+    const dateKeywords = ['date', 'day', 'time', 'when', 'timestamp', 'created', 'logged']
+
+    // First, look for exact matches or headers containing date keywords
+    for (let i = 0; i < headers.length; i++) {
+        const header = headers[i].toLowerCase().trim()
+        if (dateKeywords.some(keyword => header.includes(keyword))) {
+            return i
+        }
+    }
+
+    // Default to the first column if no date column is found
+    return 0
+}
+
+/**
  * Auto-detect column types based on sample values
  */
 export function detectColumnType(values: (string | number)[]): {

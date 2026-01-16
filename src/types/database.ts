@@ -249,10 +249,19 @@ export interface Database {
         }
       }
     }
+    Views: {
+      [_ in never]: never
+    }
+    Functions: {
+      [_ in never]: never
+    }
     Enums: {
       subscription_status: SubscriptionStatus
       habit_category: HabitCategory
       goal_type: GoalType
+    }
+    CompositeTypes: {
+      [_ in never]: never
     }
   }
 }
