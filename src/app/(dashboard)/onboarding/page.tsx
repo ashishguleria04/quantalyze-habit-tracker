@@ -7,6 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { FileUploader } from '@/components/onboarding/file-uploader'
 import { ColumnMapper } from '@/components/onboarding/column-mapper'
 import { ColumnMapping, ParsedSpreadsheetData } from '@/types/habits'
+import { Habit, Database } from '@/types/database'
 import { parseSpreadsheet } from '@/lib/parsers/column-mapper'
 import { detectDateColumn, autoMapColumns } from '@/lib/parsers/column-mapper'
 import { getSupabaseClient } from '@/lib/supabase/client'
@@ -60,7 +61,7 @@ export default function OnboardingPage() {
       if (!user) throw new Error('Not authenticated')
 
       // 1. Create habits
-      const habitsToCreate = mappings.map(m => ({
+      const habitsToCreate: Database['public']['Tables']['habits']['Insert'][] = mappings.map(m => ({
         user_id: user.id,
         name: m.habitName || m.columnName,
         category: m.category,
@@ -73,8 +74,8 @@ export default function OnboardingPage() {
 
       const { data: createdHabits, error: habitsError } = await supabase
         .from('habits')
-        .insert(habitsToCreate)
-        .select()
+        .insert(habitsToCreate as any)
+        .select() as { data: Habit[] | null, error: Error | null }
 
       if (habitsError) throw habitsError
 
@@ -121,7 +122,7 @@ export default function OnboardingPage() {
         const batch = logsToCreate.slice(i, i + batchSize)
         const { error: logsError } = await supabase
           .from('daily_logs')
-          .insert(batch)
+          .insert(batch as any)
         
         if (logsError) {
           console.error('Error inserting logs batch:', logsError)

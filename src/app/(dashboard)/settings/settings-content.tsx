@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { User } from '@supabase/supabase-js'
-import { Profile } from '@/types/database'
+import { Profile, Database } from '@/types/database'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -39,8 +39,8 @@ export function SettingsContent({ user, profile }: SettingsContentProps) {
   const handleUpdateProfile = async () => {
     setIsLoading(true)
     try {
-      const { error } = await supabase
-        .from('profiles')
+      const { error } = await (supabase
+        .from('profiles') as any)
         .update({ full_name: fullName })
         .eq('id', user.id)
 

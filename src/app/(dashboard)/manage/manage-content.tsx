@@ -102,9 +102,9 @@ export function ManageContent({ initialHabits, initialLogs }: ManageContentProps
           goal_value: habitForm.goal_value ?? null,
           unit: habitForm.unit || null,
         }
-        const { data, error } = await supabase
-          .from('habits')
-          .update(updateData as any)
+        const { data, error } = await (supabase
+          .from('habits') as any)
+          .update(updateData)
           .eq('id', editingHabit.id)
           .select()
           .single()
